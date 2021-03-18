@@ -68,6 +68,7 @@ Delay-Server后台管理系统，基于SpringBoot2.0 + Spring Data Jpa + Thymele
 
 #### TODO    
 1. 有些功能细则待完善  
+2. 系统负载和消息管理页面开发中   
 
 #### 预览图
 
