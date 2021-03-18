@@ -1,0 +1,87 @@
+<!-- app管理页面 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:mo="https://gitee.com/aun/Timo"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body class="timo-layout-page">
+<div class="layui-card">
+    <div class="layui-card-header timo-card-header">
+        <span><i class="fa fa-bars"></i> App管理</span>
+        <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+    </div>
+    <div class="layui-card-body">
+        <div class="layui-row timo-card-screen">
+
+            <div class="pull-left layui-form-pane timo-search-box">
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block timo-search-status">
+                        <select class="timo-search-select" name="status" mo:dict="SEARCH_STATUS" mo-selected="${param.status}"
+                        ></select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn timo-search-btn">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="pull-right screen-btn-group">
+                <button class="layui-btn open-popup" data-title="申请Appkey" th:attr="data-url=@{/application/app/toApplyAppKey}"
+                        shiro:hasPermission="application:app:applyApp" data-size="460,357">
+                    <i class="fa fa-plus"></i> 申请Appkey
+                </button>
+
+                <div class="btn-group" shiro:hasPermission="application:app:applyApp">
+                    <button class="layui-btn">操作<span class="caret"></span></button>
+                    <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                        <dd><a class="ajax-status" th:href="@{/application/app/status/ok}">启用</a></dd>
+                        <dd><a class="ajax-status" th:href="@{/application/app/status/freezed}">冻结</a></dd>
+                        <dd><a class="ajax-status" th:href="@{/application/app/status/delete}">删除</a></dd>
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+        <div class="timo-table-wrap">
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox">
+                            <i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th class="sortable" data-field="appId">AppID</th>
+                    <th class="sortable" data-field="appkey">Appkey</th>
+                    <th class="sortable" data-field="appSecret">AppSecret</th>
+                    <th class="sortable" data-field="appDesc">AppDesc</th>
+                    <th data-field="creator">创建人</th>
+                    <th data-field="creatorOrg">创建人组织</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item:${list}">
+                    <td><label class="timo-checkbox"><input type="checkbox" th:value="${item.appId}">
+                        <i class="layui-icon layui-icon-ok"></i></label></td>
+                    <td th:text="${item.appId}">AppID</td>
+                    <td th:text="${item.appKey}">Appkey</td>
+                    <td th:text="${item.appSecret}">AppSecret</td>
+                    <td th:text="${item.appDesc}">AppDesc</td>
+                    <td th:text="${item.creator}">创建人</td>
+                    <td th:text="${item.creatorOrg}">创建人组织</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:replace="/common/fragment :: page"></div>
+    </div>
+</div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

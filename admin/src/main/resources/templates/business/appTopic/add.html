@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form timo-compile">
+    <form th:action="@{/application/topic/save}">
+        <input type="hidden" name="id" th:if="${appTopic}" th:value="${appTopic.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">appkey</label>
+            <div class="layui-input-inline">
+                <select id="appKeyDropDown" class="timo-search-select " name="appKey" lay-verify="required" th:value="${appTopic?.appKey}" >
+                    <option value="0" >请选择APP</option>
+                </select>
+
+<!--                <input class="layui-input" type="text" name="appKey" placeholder="请输入appkey" th:value="${appTopic?.appKey}">-->
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mq类型</label>
+            <div class="layui-input-inline">
+                <select id="mqTypeDropDown" class="timo-search-select " name="mqType" lay-verify="required" th:value="${appTopic?.mqType}" >
+                    <option value="1" >Kafka</option>
+                    <option value="2" >active-mq</option>
+                    <option value="3" >redis-pubsub</option>
+                </select>
+
+<!--                <input class="layui-input" type="text" name="mqType" placeholder="请输入mq类型" th:value="${appTopic?.mqType}">-->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mq topic</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="topic" placeholder="请输入mq topic" th:value="${appTopic?.topic}">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">创建者</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="creator" placeholder="请输入创建者" th:value="${appTopic?.creator}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">创建者组织</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="creatorOrg" placeholder="请输入创建者组织" th:value="${appTopic?.creatorOrg}">
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+
+    <script >
+        layui.use(['jquery', 'layer', 'form'], function () {
+            var $ = layui.$ //重点处
+                , layer = layui.layer;
+            var form = layui.form;
+            //后面就跟你平时使用jQuery一样
+            $.ajax({
+                url: '/application/topic/queryAppKey4User',
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    cont = data.data;
+                    console.log(cont);
+                    if (cont != null) {
+                        $("#appKeyDropDown").empty();
+                        var ss = "<option value=\"0\" >请选择APP1</option>";
+                        $.each(cont, function (index, obj) {
+                            console.log(obj);
+                            $("#appKeyDropDown").append(new Option(obj.appDesc, obj.appKey));
+                            // $("#appKeyDropDown").append(ss);
+                        });
+                        form.render("select");
+                    }
+
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>

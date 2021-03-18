@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="timo-detail-page">
+        <div class="timo-detail-title">基本信息</div>
+        <table class="layui-table timo-detail-table">
+            <colgroup>
+                <col width="100px"><col>
+                <col width="100px"><col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>主键ID</th>
+                    <td th:text="${appTopic.id}"></td>
+                    <th>appkey</th>
+                    <td th:text="${appTopic.appKey}"></td>
+                </tr>
+                <tr>
+                    <th>mq类型</th>
+                    <td th:text="${appTopic.mqType}"></td>
+                    <th>mq topic</th>
+                    <td th:text="${appTopic.topic}"></td>
+                </tr>
+                <tr>
+                    <th>创建者</th>
+                    <td th:text="${appTopic.creator}"></td>
+                    <th>创建者组织</th>
+                    <td th:text="${appTopic.creatorOrg}"></td>
+                </tr>
+                <tr>
+                    <th>创建时间</th>
+                    <td th:text="${#dates.format(appTopic.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <th>更新时间</th>
+                    <td th:text="${#dates.format(appTopic.updateDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

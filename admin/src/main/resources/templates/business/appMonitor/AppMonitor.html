@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:mo="https://gitee.com/aun/Timo">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body class="timo-layout-page">
+<div class="layui-card">
+    <div class="layui-card-header timo-card-header">
+        <span><i class="fa fa-bars"></i> App Topic数量趋势</span>
+        <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+    </div>
+    <div class="layui-card-body">
+
+        <div class="layui-row ">
+
+
+            <div class="pull-left layui-form-pane  xm-select-demo">
+                <div class="layui-inline">
+                    <!--                    <label class="layui-form-label">AppKey</label>-->
+
+                    <div class="layui-input-block" style="width: 200px;" >
+                        <!--                        <div id="appDropdown" class="xm-select-demo"></div>-->
+                        <input id="appKeyText" type="text" name="grantee" th:value="${param.appKey}" placeholder="请输入appKey" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <button type="button" class="layui-btn" id="queryTopic">查询topic</button>
+
+                <div class="layui-inline">
+                    <!--                    <label class="layui-form-label">Topics</label>-->
+
+                    <div class="layui-input-block" style="width: 200px;" >
+                        <div id="topicDropdown" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">数据时间范围</label>
+                    <div class="layui-input-inline" style="width: 180px">
+                        <input type="text" class="layui-input" id="test10" placeholder="目前只支持查询当天数据">
+                    </div>
+                </div>
+
+                <button type="button" class="layui-btn" id="search">搜索</button>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <div id="main" style="height:600px;"></div>
+
+
+
+
+            <div th:replace="/common/fragment :: page"></div>
+        </div>
+    </div>
+
+    <script src="/js/xm-select.js"></script>
+    <script th:replace="/common/template :: script"></script>
+    <script src="/js/echarts-min.js"></script>
+
+    <script>
+
+        option = {
+            title: {// 图表标题，可以通过show:true/false控制显示与否，还有subtext:'二级标题',link:'http://www.baidu.com'等
+                text: 'topic消息数量趋势图'
+            },
+            tooltip : {// 这个是鼠标浮动时的工具条，显示鼠标所在区域的数据，trigger这个地方每种图有不同的设置，见官网吧，一两句说不清楚
+                trigger: 'axis'
+            },
+            legend: {// 这个就是图例，也就是每条折线或者项对应的示例，就是这个<a target=_blank href="http://img.blog.csdn.net/20160622094820180?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">图例</a>
+                data:[]
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}// 工具，提供几个按钮，例如动态图表转换，数据视图，保存为图片等
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',// 这几个属性可以控制图表上下左右的空白尺寸，可以自己试试。
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : []// X轴的定义
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'// Y轴的定义
+                }
+            ],
+            series : []// 这里就是数据了
+        };
+        var myChart = echarts.init(document.getElementById('main'));
+
+        layui.config({
+            base: '/js/'
+        }).extend({
+            xmSelect: 'xm-select'
+        }).use(['form', 'layedit', 'laydate','element','jquery', 'xmSelect'], function() {
+            var form = layui.form,
+                layer = layui.layer,
+                element=layui.element,
+                laydate=layui.laydate,
+                $=layui.jquery,
+                xmSelect = layui.xmSelect;
+
+            var topicDropdownSelect = xmSelect.render({
+                el: '#topicDropdown',
+                tips: '请选择topic',
+                empty: '没有数据啊，请检查appkey是否正确',
+                data: []
+            });
+
+            //日期时间范围
+            laydate.render({
+                elem: '#test10'
+                ,type: 'datetime'
+                ,range: true
+            });
+
+
+            $(document).on('click', '#queryTopic', function () {
+                var curApp = $("#appKeyText").val();
+                console.log(curApp);
+                $.ajax({
+                    url:"/application/appMonitor/queryTopics",
+                    type:'get',
+                    data: {"appKey": curApp},
+                    dataType:'json',
+                    success:function(obj){
+                        var Item = function(){
+                            return {
+                                name:'',
+                                value: 0
+                            }
+                        };
+
+
+                        if (obj.data != null && obj.data.length > 0) {
+                            var selectData = [];
+                            var jso = obj.data;
+                            for(var i=0; i < obj.data.length; i++){
+                                var it = new Item();
+                                it.name = jso[i];
+                                it.value = jso[i];
+                                selectData.push(it);
+                            }
+
+                            xmSelect.render({
+                                el: '#topicDropdown',
+                                tips: '请选择topic',
+                                data: selectData
+                            });
+                        } else {
+                            xmSelect.render({
+                                el: '#topicDropdown',
+                                tips: '请选择topic',
+                                empty: '没有数据啊，请检查appkey是否正确',
+                                data: []
+                            });
+                        }
+                    },
+                    error:function(){
+                        alert("数据加载失败！请检查数据链接是否正确");
+                    }
+                });
+            });
+
+            $(document).on('click','#search',function(){
+                // searchTopicStat();
+                var curApp = $("#appKeyText").val();
+                var timeRange = $("#test10").val();
+                var selectArr = topicDropdownSelect.getValue();
+                var isArray = selectArr instanceof Array;
+                // console.log("selectArr===" + selectArr);
+                // console.log("selectArr===" + JSON.stringify(selectArr, null, 2));
+                // console.log("selectArr===" + JSON.stringify(selectArr));
+                // console.log("isArray===" + isArray);
+                // console.log("timeRange===" + timeRange);
+                var topics = new Array();
+                if (selectArr != null && selectArr.length > 0) {
+                    for (var i = 0; i < selectArr.length; i++) {
+                        topics[i] = selectArr[i].name;
+                    }
+                }
+                console.log(topics);
+                $.ajax({
+                    url:"/application/appMonitor/search",
+                    type:'post',
+                    async: false,
+                    data: JSON.stringify({
+                        "appKey": curApp,
+                        "topics": topics,
+                        "timeRange": timeRange,
+                    }),
+                    dataType:'json',
+                    contentType: "application/json; charset=utf-8",
+                    success:function(obj){
+                        if (obj.data != null) {
+                            var Item = function(){
+                                return {
+                                    name:'',
+                                    type:'line',
+                                    //
+                                    data:[]
+                                }
+                            };
+                            var legends = [];
+                            var Series = [];
+                            var jsons = obj.data;
+                            var jso = jsons.data;
+                            // console.log("======" + jso)
+                            for(var i=0;i < jso.length;i++){
+                                var it = new Item();
+                                it.name = jso[i].name;
+                                legends.push(jso[i].name);
+                                it.data = jso[i].data;
+                                Series.push(it);
+                            }
+
+                            option.xAxis[0].data = jsons.xcontent;
+                            option.legend.data = legends;
+                            option.series = Series; // 设置图表
+                            myChart.setOption(option);// 重新加载图表
+                        } else {
+                            layer.msg("没有查到数据，请检查输入");
+                        }
+
+                    },
+                    error:function(){
+                        alert("数据加载失败！请检查数据链接是否正确");
+                    }
+                });
+
+
+            });
+        });
+
+        myChart.setOption(option);
+
+    </script>
+</body>
+</html>

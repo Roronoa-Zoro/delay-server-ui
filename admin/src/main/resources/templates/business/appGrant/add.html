@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+</head>
+<body>
+    <div class="layui-form timo-compile">
+    <form th:action="@{/application/appGrant/save}">
+        <input type="hidden" name="id" th:if="${appGrant}" th:value="${appGrant.id}">
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">授权人</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input class="layui-input" type="text" name="grantor" placeholder="请输入授权人" th:value="${appGrant?.grantor}">-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">被授权人UserName</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="grantee" placeholder="请输入被授权人" th:value="${appGrant?.grantee}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">被授权APP</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="granteeOrg" placeholder="请输入被授权APP" th:value="${appGrant?.appKey}">
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+<script th:replace="/common/template :: script"></script>
+</body>
+</html>

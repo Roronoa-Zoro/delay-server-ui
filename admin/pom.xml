@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>admin</artifactId>
+    <packaging>jar</packaging>
+    <name>后台管理模块</name>
+
+    <parent>
+        <groupId>com.illegalaccess.delay.ui</groupId>
+        <artifactId>delay-server-ui</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.illegalaccess.delay</groupId>
+            <artifactId>delay-ui-client</artifactId>
+            <version>1.0.0-snapshot</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.illegalaccess.delay</groupId>
+            <artifactId>delay-toolkit</artifactId>
+            <version>1.0.0-snapshot</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-rpc-rest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-zookeeper</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--开发模块，上线部署可以注释掉-->
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui</groupId>
+            <artifactId>devtools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.modules</groupId>
+            <artifactId>system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.modules</groupId>
+            <artifactId>delay-business</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.component</groupId>
+            <artifactId>shiro</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.component</groupId>
+            <artifactId>actionLog</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.component</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.illegalaccess.delay.ui.component</groupId>
+            <artifactId>fileUpload</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <finalName>delay-server-admin-${project.version}</finalName>
+    </build>
+</project>
