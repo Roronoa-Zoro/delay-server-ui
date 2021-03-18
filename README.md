@@ -64,7 +64,8 @@ Delay-Server后台管理系统，基于SpringBoot2.0 + Spring Data Jpa + Thymele
 
 1. 使用文档：sdoc/使用文档.docx    
 2. SQL文件：sdoc/delay-server-ui.sql    
-3. 系统已经内建了应用接入方角色，新加的用户可以分配这个角色     
+3. 系统已经内建了应用接入方角色，新加的用户可以分配这个角色    
+4. 应用监控页面，时间选择器只能选择当天，不支持跨天查询      
 
 #### TODO    
 1. 有些功能细则待完善  
